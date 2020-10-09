@@ -1,21 +1,31 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React from "react";
+import * as eva from "@eva-design/eva";
+import { ApplicationProvider, IconRegistry } from "@ui-kitten/components";
+import { EvaIconsPack } from '@ui-kitten/eva-icons';
+import { AppRegistry } from "react-native";
+import { NativeRouter, Route, Switch } from "react-router-native";
+import { default as theme } from './assets/custom-theme.json';
+import { name as appName } from "./app.json";
+import Index from "./src/Index";
+import CameraComp from "./src/Camera";
+import SelectImage from "./src/SelectImage";
+import { BookContextProvider } from "./src/context/BookContext";
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NativeRouter>
+      <Switch>
+      <ApplicationProvider {...eva} theme={{ ...eva.light, ...theme }}>
+        <IconRegistry icons={EvaIconsPack} />
+          <BookContextProvider>
+            <Route exact path="/" component={Index} />
+            <Route exact path="/camera" component={CameraComp} />
+            <Route exact path="/SelectItem" component={SelectImage} />
+          </BookContextProvider>
+        </ApplicationProvider>
+      </Switch>
+    </NativeRouter>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+AppRegistry.registerComponent(appName, () => App);
